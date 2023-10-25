@@ -1,5 +1,7 @@
 global using HRIS.Basic.Models;
-using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore;
+global using HRIS.Basic.Data;
+using HRIS.Basic.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HRIS.Basic.Models;
+namespace HRIS.Basic.Models.Domain;
 
 public partial class EmploymentStatus
 {
-    public long EmploymentStatusId { get; set; }
+    public Guid EmploymentStatusId { get; set; }
 
     public string Status { get; set; } = null!;
 
@@ -13,11 +13,9 @@ public partial class EmploymentStatus
 
     public DateTime UpdatedAt { get; set; }
 
-    public long CreatedBy { get; set; }
+    public Guid CreatedBy { get; set; }
 
-    public long UpdatedBy { get; set; }
+    public Guid UpdatedBy { get; set; }
 
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
-
-    public virtual Job? Job { get; set; }
 }

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HRIS.Basic.Models;
+namespace HRIS.Basic.Models.Domain;
 
 public partial class User
 {
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
 
-    public long SystemRoleId { get; set; }
+    public Guid SystemRoleId { get; set; }
 
     public string FirstName { get; set; } = null!;
 
@@ -23,9 +23,9 @@ public partial class User
 
     public DateTime UpdatedAt { get; set; }
 
-    public DateTime CreatedBy { get; set; }
+    public Guid CreatedBy { get; set; }
 
-    public DateTime UpdatedBy { get; set; }
+    public Guid UpdatedBy { get; set; }
 
     public virtual SystemRole SystemRole { get; set; } = null!;
 }
