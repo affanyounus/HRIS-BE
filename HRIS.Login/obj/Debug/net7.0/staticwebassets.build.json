@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "D3kCeSNCDVSvnNHcAfHCb0U782FlGLH2ZAdfswJgiIo=",
+  "Source": "HRIS.Login",
+  "BasePath": "_content/HRIS.Login",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
