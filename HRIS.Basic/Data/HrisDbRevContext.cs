@@ -31,6 +31,10 @@ public partial class HrisDbRevContext : DbContext
 
     public virtual DbSet<Job> Jobs { get; set; }
 
+    public virtual DbSet<EmployeeProjectsAssigned> EmployeeProjectsAssigned { get; set; }
+
+    public virtual DbSet<Project> Projects { get; set; }
+
     public virtual DbSet<Skill> Skills { get; set; }
 
     public virtual DbSet<SystemRole> SystemRoles { get; set; }
@@ -39,8 +43,8 @@ public partial class HrisDbRevContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Employee).Assembly);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SystemRole).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(Employee.EmployeeConfiguration).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SystemRole.SystemRoleConfiguration).Assembly);
 
 
         OnModelCreatingPartial(modelBuilder);
@@ -185,6 +189,42 @@ public partial class HrisDbRevContext : DbContext
     //            .OnDelete(DeleteBehavior.ClientSetNull)
     //            .HasConstraintName("FK_EmployeeRolePermission_EmployeeRoleId");
     //    });
+
+    //    modelBuilder.Entity<EmployeeProjectsAssigned>(entity =>
+    //    {
+    //        entity.HasKey(e => e.EmployeeProjectAssignedId);
+
+    //        entity.ToTable("EmployeeProjectsAssigned");
+
+    //        entity.Property(e => e.EmployeeProjectAssignedId).ValueGeneratedNever();
+    //        entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+    //        entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+
+    //        entity.HasOne(d => d.Project).WithMany(p => p.EmployeeProjectsAssigneds)
+    //            .HasForeignKey(d => d.ProjectId)
+    //            .OnDelete(DeleteBehavior.ClientSetNull)
+    //            .HasConstraintName("FK_EmployeeProjectsAssigned_ProjectId");
+    //    });
+
+    //modelBuilder.Entity<Project>(entity =>
+    //{
+    //    entity.ToTable("Project");
+
+    //    entity.Property(e => e.ProjectId).ValueGeneratedNever();
+    //    entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+    //    entity.Property(e => e.EndDate).HasColumnType("date");
+    //    entity.Property(e => e.Name)
+    //        .HasMaxLength(255)
+    //        .IsUnicode(false);
+    //    entity.Property(e => e.Priority)
+    //        .HasMaxLength(255)
+    //        .IsUnicode(false);
+    //    entity.Property(e => e.StartDate).HasColumnType("date");
+    //    entity.Property(e => e.Status)
+    //        .HasMaxLength(255)
+    //        .IsUnicode(false);
+    //    entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+    //});
 
     //    modelBuilder.Entity<EmployeeSkill>(entity =>
     //    {

@@ -1,4 +1,4 @@
-﻿namespace HRIS.Basic.Models.DTO
+﻿namespace HRIS.Basic.Models.DTO.SystemRole
 {
     public class SystemRoleDTO
     {

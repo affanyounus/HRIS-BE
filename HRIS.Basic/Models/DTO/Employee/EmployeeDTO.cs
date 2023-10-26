@@ -1,4 +1,4 @@
-﻿namespace HRIS.Basic.Models.DTO
+﻿namespace HRIS.Basic.Models.DTO.Employee
 {
     public class EmployeeDTO
     {

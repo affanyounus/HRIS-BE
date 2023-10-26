@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HRIS.Basic.Data;
 using HRIS.Basic.Models.Domain;
-using HRIS.Basic.Models.DTO;
+using HRIS.Basic.Models.DTO.SystemRole;
 
 namespace HRIS.Basic.Controllers
 {
