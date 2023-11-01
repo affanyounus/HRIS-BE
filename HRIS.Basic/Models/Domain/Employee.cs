@@ -4,8 +4,9 @@ using System.Collections.Generic;
 
 namespace HRIS.Basic.Models.Domain;
 
-public partial class Employee
+public partial class Employee: AuditableFields
 {
+    [Key]
     public Guid EmployeeId { get; set; }
 
     public Guid EmploymentStatusId { get; set; }
@@ -31,14 +32,6 @@ public partial class Employee
     public string State { get; set; } = null!;
 
     public string City { get; set; } = null!;
-
-    public DateTime CreatedAt { get; set; }
-
-    public DateTime UpdatedAt { get; set; }
-
-    public Guid CreatedBy { get; set; }
-
-    public Guid UpdatedBy { get; set; }
 
     public virtual ICollection<EmployeeAttendance> EmployeeAttendances { get; set; } = new List<EmployeeAttendance>();
 

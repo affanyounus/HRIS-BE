@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 namespace HRIS.Basic.Models.Domain;
 
-public partial class Project
+public partial class Project: AuditableFields
 {
+    [Key]
     public Guid ProjectId { get; set; }
 
     public string Name { get; set; } = null!;
@@ -19,13 +20,5 @@ public partial class Project
 
     public bool IsActive { get; set; }
 
-    public DateTime CreatedAt { get; set; }
-
-    public DateTime UpdatedAt { get; set; }
-
-    public Guid CreatedBy { get; set; }
-
-    public Guid UpdatedBy { get; set; }
-
-    public virtual ICollection<EmployeeProjectsAssigned> EmployeeProjectsAssigneds { get; set; } = new List<EmployeeProjectsAssigned>();
+    public virtual ICollection<EmployeeProjectAllocation> EmployeeProjectsAllocations { get; set; } = new List<EmployeeProjectAllocation>();
 }

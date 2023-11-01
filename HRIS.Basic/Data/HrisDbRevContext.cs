@@ -31,7 +31,7 @@ public partial class HrisDbRevContext : DbContext
 
     public virtual DbSet<Job> Jobs { get; set; }
 
-    public virtual DbSet<EmployeeProjectsAssigned> EmployeeProjectsAssigned { get; set; }
+    public virtual DbSet<EmployeeProjectAllocation> EmployeeProjectAllocations { get; set; }
 
     public virtual DbSet<Project> Projects { get; set; }
 
@@ -44,14 +44,53 @@ public partial class HrisDbRevContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(Employee.EmployeeConfiguration).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(
+            typeof(EmployeeProjectAllocation.EmployeeProjectsAssignedConfiguration).Assembly);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SystemRole.SystemRoleConfiguration).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(User.UserConfiguration).Assembly);
+
 
 
         OnModelCreatingPartial(modelBuilder);
 
     }
-
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var insertedEntries = this.ChangeTracker.Entries()
+            .Where(x => x.State == EntityState.Added)
+            .Select(x => x.Entity);
+        foreach(var insertedEntry in insertedEntries)
+        {
+            //If the inserted object is an Auditable. 
+            if(insertedEntry is AuditableFields auditableEntity)
+            {
+                auditableEntity.CreatedAt = DateTime.UtcNow;
+                auditableEntity.UpdatedAt = DateTime.UtcNow;
+                
+                auditableEntity.CreatedBy = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6");
+                auditableEntity.UpdatedBy = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6");
+            }
+        }
+
+        var modifiedEntries = this.ChangeTracker.Entries()
+            .Where(x => x.State == EntityState.Modified)
+            .Select(x => x.Entity);
+
+        foreach (var modifiedEntry in modifiedEntries)
+        {
+            //If the inserted object is an Auditable. 
+            
+            if (modifiedEntry is AuditableFields auditableEntity)
+            {
+                auditableEntity.UpdatedAt = DateTime.UtcNow;
+                auditableEntity.UpdatedBy = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6");
+            }
+        }
+        return base.SaveChangesAsync(cancellationToken);
+    }
 
 
     //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

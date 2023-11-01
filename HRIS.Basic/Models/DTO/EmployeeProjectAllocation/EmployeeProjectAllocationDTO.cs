@@ -1,11 +1,11 @@
 ﻿using HRIS.Basic.Models.DTO.Employee;
 using HRIS.Basic.Models.DTO.Project;
 
-namespace HRIS.Basic.Models.DTO.EmployeeProjectsAssigned
+namespace HRIS.Basic.Models.DTO.EmployeeProjectAllocation
 {
-    public class EmployeeProjectsAssignedDTO
+    public class EmployeeProjectAllocationDTO
     {
-        public Guid EmployeeProjectAssignedId { get; set; }
+        public Guid EmployeeProjectAllocationId { get; set; }
 
         public Guid ProjectId { get; set; }
 

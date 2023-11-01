@@ -5,6 +5,7 @@ namespace HRIS.Basic.Models.Domain;
 
 public partial class EmployeeAttendanceLog
 {
+    [Key]
     public Guid EmployeeAttendanceLogId { get; set; }
 
     public Guid EmployeeAttendanceId { get; set; }

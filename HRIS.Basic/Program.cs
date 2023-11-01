@@ -1,7 +1,12 @@
 global using HRIS.Basic.Models;
 global using Microsoft.EntityFrameworkCore;
 global using HRIS.Basic.Data;
+global using System.ComponentModel.DataAnnotations;
 using HRIS.Basic.Controllers;
+using HRIS.Basic.Mappings;
+using HRIS.Basic.Repositories;
+using HRIS.Basic.Repositories.Interfaces;
+using Microsoft.Identity.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +23,10 @@ builder.Services.AddDbContext<HrisDbRevContext>(options =>
         builder.Configuration.GetConnectionString("HRISConnectionString")
         );
 });
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 

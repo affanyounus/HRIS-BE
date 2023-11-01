@@ -4,19 +4,12 @@ using System.Collections.Generic;
 
 namespace HRIS.Basic.Models.Domain;
 
-public partial class SystemRole
+public partial class SystemRole: AuditableFields
 {
+    [Key]
     public Guid SystemRoleId { get; set; }
 
     public string RoleName { get; set; } = null!;
-
-    public DateTime CreatedAt { get; set; }
-
-    public DateTime UpdatedAt { get; set; }
-
-    public Guid CreatedBy { get; set; }
-
-    public Guid UpdatedBy { get; set; }
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 

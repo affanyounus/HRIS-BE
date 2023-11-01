@@ -13,11 +13,11 @@ namespace HRIS.Basic.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SystemRoleController : ControllerBase
+    public class SystemRolesController : ControllerBase
     {
         private readonly HrisDbRevContext _context;
 
-        public SystemRoleController(HrisDbRevContext context)
+        public SystemRolesController(HrisDbRevContext context)
         {
             _context = context;
         }
