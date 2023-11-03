@@ -28,7 +28,6 @@ namespace HRIS.Basic.Mappings
                 //.ForMember(dest=> dest.Email, act=> act.Ignore())
                 .ReverseMap();
 
-
             CreateMap<UserRequestDTO, User>().ReverseMap();
 
 

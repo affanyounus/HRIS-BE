@@ -10,12 +10,14 @@ using HRIS.Basic.Data;
 using HRIS.Basic.Models.Domain;
 using HRIS.Basic.Models.DTO.User;
 using HRIS.Basic.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HRIS.Basic.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly HrisDbRevContext _dbContext;
