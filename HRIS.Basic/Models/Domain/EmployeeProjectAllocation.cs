@@ -25,7 +25,7 @@ public partial class EmployeeProjectAllocation: AuditableFields
 
     public virtual Project Project { get; set; } = null!;
 
-    public class EmployeeProjectsAssignedConfiguration : IEntityTypeConfiguration<EmployeeProjectAllocation>
+    public class EmployeeProjectAllocationConfiguration : IEntityTypeConfiguration<EmployeeProjectAllocation>
     {
         public void Configure(EntityTypeBuilder<EmployeeProjectAllocation> builder)
         {
