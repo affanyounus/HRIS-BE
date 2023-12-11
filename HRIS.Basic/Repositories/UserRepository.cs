@@ -1,6 +1,8 @@
 ﻿using HRIS.Basic.Models.Domain;
+using HRIS.Basic.Models.Domain.Auth;
 using HRIS.Basic.Models.DTO.User;
 using HRIS.Basic.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRIS.Basic.Repositories
@@ -12,24 +14,29 @@ namespace HRIS.Basic.Repositories
         {
             _dbContext = dbRevContext;
         }
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<IEnumerable<ApplicationUser>> GetUsers()
         {
-            return await _dbContext.Users.ToListAsync();
+            throw new NotImplementedException();
+            //return await _dbContext.Users.ToListAsync();
+
+            //return UserManager<ApplicationUser>
         }
 
-        public async Task<User?> GetUser(Guid id)
+        public async Task<ApplicationUser?> GetUser(Guid id)
         {
 
-            if (_dbContext.Users != null)
-            {
-                return await _dbContext.Users.FindAsync(id);
-            }
+            //if (_dbContext.Users != null)
+            //{
+            //    return await _dbContext.Users.FindAsync(id);
+            //}
 
-            return null;
+            //return null;
+
+            throw new NotImplementedException();
 
         }
 
-        public Task<IActionResult> PutUser(Guid id, User user)
+        public Task<IActionResult> PutUser(Guid id, ApplicationUser user)
         {
             throw new NotImplementedException();
         }
@@ -45,8 +52,9 @@ namespace HRIS.Basic.Repositories
         }
 
        public bool UserExists(Guid id)
-        {
-            return (_dbContext.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
+       {
+           throw new NotImplementedException();
+            //return (_dbContext.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
         }
     }
 }

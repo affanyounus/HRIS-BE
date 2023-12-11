@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HRIS.Basic.Data;
 using HRIS.Basic.Models.Domain;
+using HRIS.Basic.Models.Domain.Auth;
 using HRIS.Basic.Models.DTO.User;
 using HRIS.Basic.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -20,13 +21,14 @@ namespace HRIS.Basic.Controllers
     [Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly HrisDbRevContext _dbContext;
+        private readonly HrisDbRevContext _dbRevContext;
+        private readonly HrisDbAuthContext _dbAuthContext;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public UsersController(HrisDbRevContext dbContext, IUserRepository userRepository, IMapper mapper)
+        public UsersController(HrisDbRevContext dbRevContext, IUserRepository userRepository, IMapper mapper)
         {
-            _dbContext = dbContext;
+            _dbRevContext = dbRevContext;
             _userRepository = userRepository;
             _mapper = mapper;
         }
@@ -35,11 +37,11 @@ namespace HRIS.Basic.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
-          if (_dbContext.Users == null)
-          {
-              return NotFound();
-          }
-            //var usersList = await _dbContext.Users.ToListAsync();
+          //if (_dbRevContext.Users == null)
+          //{
+          //    return NotFound();
+          //}
+            //var usersList = await _dbRevContext.Users.ToListAsync();
 
             var usersList = await _userRepository.GetUsers();
 
@@ -107,18 +109,18 @@ namespace HRIS.Basic.Controllers
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, User user)
+        public async Task<IActionResult> PutUser(Guid id, ApplicationUser user)
         {
-            if (id != user.UserId)
+            if (id != user.Id)
             {
                 return BadRequest();
             }
 
-            _dbContext.Entry(user).State = EntityState.Modified;
+            _dbRevContext.Entry(user).State = EntityState.Modified;
 
             try
             {
-                await _dbContext.SaveChangesAsync();
+                await _dbRevContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -140,7 +142,7 @@ namespace HRIS.Basic.Controllers
         [HttpPost]
         public async Task<ActionResult<UserRequestDTO>> PostUser(UserRequestDTO userRequest)
         {
-          if (_dbContext.Users == null)
+          if (_dbRevContext.Users == null)
           {
               return Problem("Entity set 'HrisDbRevContext.Users'  is null.");
           }
@@ -150,25 +152,24 @@ namespace HRIS.Basic.Controllers
               return UnprocessableEntity(ModelState);
           }
 
-            var userModel = new User()
+            var userModel = new ApplicationUser()
             {
-                FirstName = userRequest.FirstName,
-                LastName = userRequest.LastName,
+                UserName = userRequest.Email,
                 Email = userRequest.Email,
-                Password = userRequest.Password,
-                IsActive = true,
-                SystemRoleId = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6")
+                PasswordHash = userRequest.Password,
+                LockoutEnabled = false,
+                //SystemRoleId = new Guid("3FA85F64-5717-4562-B3FC-2C963F66AFA6")
 
             };
 
-            _dbContext.Users.Add(userModel);
+            _dbRevContext.Users.Add(userModel);
             try
             {
-                await _dbContext.SaveChangesAsync();
+                await _dbRevContext.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (_userRepository.UserExists(userModel.UserId))
+                if (_userRepository.UserExists(userModel.Id))
                 {
                     return Conflict();
                 }
@@ -180,25 +181,25 @@ namespace HRIS.Basic.Controllers
 
             var userDto = _mapper.Map<UserDTO>(userModel);
 
-            return CreatedAtAction(nameof(GetUser), new { id = userDto.UserId }, userDto);
+            return CreatedAtAction(nameof(GetUser), new { id = userDto.Id }, userDto);
         }
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            if (_dbContext.Users == null)
+            if (_dbRevContext.Users == null)
             {
                 return NotFound();
             }
-            var user = await _dbContext.Users.FindAsync(id);
+            var user = await _dbRevContext.Users.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            _dbContext.Users.Remove(user);
-            await _dbContext.SaveChangesAsync();
+            _dbRevContext.Users.Remove(user);
+            await _dbRevContext.SaveChangesAsync();
 
             return NoContent();
         }

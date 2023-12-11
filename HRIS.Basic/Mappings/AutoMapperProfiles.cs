@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HRIS.Basic.Models.Domain;
+using HRIS.Basic.Models.Domain.Auth;
 using HRIS.Basic.Models.DTO.User;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
@@ -24,11 +25,11 @@ namespace HRIS.Basic.Mappings
 
             //configuration.AssertConfigurationIsValid();
 
-            CreateMap<User, UserDTO>()
-                //.ForMember(dest=> dest.Email, act=> act.Ignore())
-                .ReverseMap();
+            //CreateMap<ApplicationUser, UserDTO>()
+            //    //.ForMember(dest=> dest.Email, act=> act.Ignore())
+            //    .ReverseMap();
 
-            CreateMap<UserRequestDTO, User>().ReverseMap();
+            //CreateMap<UserRequestDTO, ApplicationUser>().ReverseMap();
 
 
         }

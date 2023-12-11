@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HRIS.Basic.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EmployeeController : Controller
+    public class EmployeeController : ControllerBase
     {
 
         private readonly HrisDbRevContext _dbRevContext;
@@ -17,6 +18,7 @@ namespace HRIS.Basic.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            //return Ok();
             return Ok(await _dbRevContext.Employees.ToListAsync());
         }
     }

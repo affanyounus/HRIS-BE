@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace HRIS.Basic.Data;
 
-public partial class HrisDbAuthContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+public partial class HrisDbAuthContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid, ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin, ApplicationRoleClaim, ApplicationUserToken>
 {
     public HrisDbAuthContext()
     {
@@ -95,6 +95,8 @@ public partial class HrisDbAuthContext : IdentityDbContext<ApplicationUser, Appl
                 .IsRequired();
         });
 
+
+        //Data Insertion in time of migration
         builder.Entity<ApplicationRole>().HasData(roles);
 
     }

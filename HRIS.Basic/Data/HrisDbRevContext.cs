@@ -1,4 +1,5 @@
 ﻿using HRIS.Basic.Models.Domain;
+using HRIS.Basic.Models.Domain.Auth;
 
 namespace HRIS.Basic.Data;
 
@@ -37,9 +38,9 @@ public partial class HrisDbRevContext : DbContext
 
     public virtual DbSet<Skill> Skills { get; set; }
 
-    public virtual DbSet<SystemRole> SystemRoles { get; set; }
+    //public virtual DbSet<SystemRole> SystemRoles { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<ApplicationUser> Users { get; set; }
 
     //protected override void OnModelCreating(ModelBuilder modelBuilder)
     //{
@@ -100,8 +101,6 @@ public partial class HrisDbRevContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(Employee.EmployeeConfiguration).Assembly);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(EmployeeProjectAllocation.EmployeeProjectAllocationConfiguration).Assembly);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(SystemRole.SystemRoleConfiguration).Assembly);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(User.UserConfiguration).Assembly);
 
         modelBuilder.Entity<EmployeeAttendance>(entity =>
         {
