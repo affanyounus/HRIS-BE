@@ -1,14 +1,7 @@
-﻿using HRIS.Basic.Models.Domain;
-
-namespace HRIS.Basic.Models.DTO.Employee
+﻿namespace HRIS.Basic.Models.DTO.Employee
 {
-    public class EmployeeDTO: AuditableFields
+    public class EmployeeRequestDTO
     {
-        public Guid EmployeeId { get; set; }
-
-        public Guid EmploymentStatusId { get; set; }
-
-        public Guid EmployeeRoleId { get; set; }
 
         public Guid UserId { get; set; }
 

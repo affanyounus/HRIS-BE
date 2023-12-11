@@ -29,6 +29,7 @@ namespace HRIS.Basic.Controllers
             {
                 UserName = authRegisterRequestDto.UserName,
                 Email = authRegisterRequestDto.UserName,
+                FullName = authRegisterRequestDto.FullName
 
             };
 

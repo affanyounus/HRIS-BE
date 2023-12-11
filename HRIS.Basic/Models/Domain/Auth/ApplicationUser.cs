@@ -6,6 +6,8 @@ namespace HRIS.Basic.Models.Domain.Auth
     {
         //here custom data tags/attributes can be defined.
 
+        public string FullName { get; set; }
+
         public virtual ICollection<ApplicationUserClaim> Claims { get; set; }
         public virtual ICollection<ApplicationUserLogin> Logins { get; set; }
         public virtual ICollection<ApplicationUserToken> Tokens { get; set; }

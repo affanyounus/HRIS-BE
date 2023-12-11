@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using HRIS.Basic.Models.DTO.Employee;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRIS.Basic.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class EmployeeController : ControllerBase
     {
 
@@ -20,6 +22,13 @@ namespace HRIS.Basic.Controllers
         {
             //return Ok();
             return Ok(await _dbRevContext.Employees.ToListAsync());
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult<EmployeeRequestDTO>> PostEmployee(EmployeeRequestDTO employeeRequestDto)
+        {
+            return Ok();
         }
     }
 }
