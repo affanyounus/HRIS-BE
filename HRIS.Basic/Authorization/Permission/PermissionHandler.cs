@@ -31,7 +31,7 @@ namespace HRIS.Basic.Authorization.Permission
 
             // Get the current user
             var userEmailClaim = context.User.FindFirst(ClaimTypes.Email);
-            var userEmail = userEmailClaim.Value;
+            var userEmail = userEmailClaim?.Value;
 
             if (userEmail == null)
             {
@@ -41,28 +41,31 @@ namespace HRIS.Basic.Authorization.Permission
             var user = await _userManager.FindByEmailAsync(userEmail);
 
             // Get claims directly associated with the user
-            var userClaims = (from userClaim in await _userManager.GetClaimsAsync(user) select userClaim.Type).ToList();
-
-            // Get claims from roles associated with the user
-            var roleClaims = new List<string>();
-            foreach (var roleName in await _userManager.GetRolesAsync(user))
+            if (user != null)
             {
-                var role = await _roleManager.FindByNameAsync(roleName);
-                if (role != null)
+                var userClaims = (from userClaim in await _userManager.GetClaimsAsync(user) select userClaim.Type).ToList();
+
+                // Get claims from roles associated with the user
+                var roleClaims = new List<string>();
+                foreach (var roleName in await _userManager.GetRolesAsync(user))
                 {
-                    var claims = await _roleManager.GetClaimsAsync(role);
+                    var role = await _roleManager.FindByNameAsync(roleName);
+                    if (role != null)
+                    {
+                        var claims = await _roleManager.GetClaimsAsync(role);
 
-                    roleClaims.AddRange(claims.Select(claim => claim.Type));
+                        roleClaims.AddRange(claims.Select(claim => claim.Type));
+                    }
                 }
-            }
             
-            // Check if requirement.ClaimName is in either userClaims or roleClaims
-            if (userClaims.Any(claim => claim == requirement.ClaimName) ||
-                roleClaims.Any(claim => claim == requirement.ClaimName))
-            {
-                // Claim found, return true
-                context.Succeed(requirement);
-                return;
+                // Check if requirement.ClaimName is in either userClaims or roleClaims
+                if (userClaims.Any(claim => claim == requirement.ClaimName) ||
+                    roleClaims.Any(claim => claim == requirement.ClaimName))
+                {
+                    // Claim found, return true
+                    context.Succeed(requirement);
+                    return;
+                }
             }
 
             return;
