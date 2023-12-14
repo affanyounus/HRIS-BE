@@ -1,4 +1,5 @@
-﻿using HRIS.Basic.Models.Domain.Auth;
+﻿using System.Security.Claims;
+using HRIS.Basic.Models.Domain.Auth;
 using HRIS.Basic.Models.DTO.AuthUser;
 using HRIS.Basic.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -11,12 +12,14 @@ namespace HRIS.Basic.Controllers
     public class AuthController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ITokenRepository _tokenRepository;
 
-        public AuthController(UserManager<ApplicationUser> userManager, ITokenRepository tokenRepository)
+        public AuthController(UserManager<ApplicationUser> userManager, ITokenRepository tokenRepository, SignInManager<ApplicationUser> signInManager)
         {
             this._userManager = userManager;
             this._tokenRepository = tokenRepository;
+            this._signInManager = signInManager;
         }
 
 
@@ -33,30 +36,33 @@ namespace HRIS.Basic.Controllers
 
             };
 
-            var identityResult = await _userManager.CreateAsync(applicationUser, authRegisterRequestDto.Password);
+            var identityUser = await _userManager.CreateAsync(applicationUser, authRegisterRequestDto.Password);
 
-            if (identityResult.Succeeded)
+            if (identityUser.Succeeded)
             {
                 //add roles to the user
-                IEnumerable<string> roles = new[] { "Viewer", "Editor" };
-                identityResult = await _userManager.AddToRolesAsync(applicationUser, roles);
-
-                if (identityResult.Succeeded)
+                IEnumerable<string> roles = new[] { "Administrator" };
+                var identityRoles = await _userManager.AddToRolesAsync(applicationUser, roles);
+                
+                if (!identityRoles.Succeeded)
                 {
-                    return Ok(identityResult);
+                    return BadRequest(identityRoles);
                 }
 
-                else
+                var claim = new Claim(ClaimTypes.Role, "burnupass");
+
+                var identityClaim = await _userManager.AddClaimAsync(applicationUser, claim);
+
+                if (!identityClaim.Succeeded)
                 {
-                    return BadRequest(identityResult);
+                    return BadRequest(identityClaim);
                 }
 
-
-               
+                return Ok(identityUser);
             }
 
 
-            return BadRequest(identityResult);
+            return BadRequest(identityUser);
         }
 
 
@@ -81,17 +87,19 @@ namespace HRIS.Basic.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
 
+            var claims = await _userManager.GetClaimsAsync(user);
+
             if (roles == null)
             {
                 return BadRequest("username or password is incorrect");
             }
 
             //create Token
-            var token = _tokenRepository.CreateJWTToken(user, roles.ToList());
+            var token = _tokenRepository.CreateJWTToken(user, roles.ToList(), (List<Claim>)claims);
 
             var response = new AuthLoginResponseDTO
             {
-                JWTToken = token
+                JWTToken =  token
             };
 
             return Ok(response);

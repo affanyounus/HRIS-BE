@@ -3,12 +3,13 @@ global using Microsoft.EntityFrameworkCore;
 global using HRIS.Basic.Data;
 global using System.ComponentModel.DataAnnotations;
 using System.Text;
-using HRIS.Basic.Controllers;
+using HRIS.Basic.Authorization.Permission;
 using HRIS.Basic.Mappings;
 using HRIS.Basic.Models.Domain.Auth;
 using HRIS.Basic.Repositories;
 using HRIS.Basic.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -40,6 +41,7 @@ builder.Services.AddDbContext<HrisDbAuthContext>(options =>
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
     .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("HRIS")
@@ -75,6 +77,24 @@ builder.Services.AddAuthentication(options => {
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+
+
+builder.Services.AddAuthorization(options =>
+{
+    //options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Administrator"));
+    options.AddPolicy("AdminPermissions", policy=>
+    {
+        policy.Requirements.Add(new PermissionRequirement("CreateEmployee"));
+        policy.Requirements.Add(new PermissionRequirement("ReadEmployee"));
+        policy.Requirements.Add(new PermissionRequirement("EditEmployee"));
+        policy.Requirements.Add(new PermissionRequirement("DeleteEmployee"));
+        //policy.Requirements.Add(new PermissionRequirement("CHKPRM1"));
+    });
+});
+builder.Services.AddTransient<IAuthorizationHandler, PermissionHandler>();
+
+
 
 
 var app = builder.Build();

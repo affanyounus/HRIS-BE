@@ -35,7 +35,7 @@ public partial class HrisDbAuthContext : IdentityDbContext<ApplicationUser, Appl
             {
                 Id = adminId,
                 Name = "Admin",
-                NormalizedName = "Administrator".ToUpper()
+                NormalizedName = "Administrator".ToUpper(),
             },
             new ApplicationRole
             {
@@ -50,6 +50,74 @@ public partial class HrisDbAuthContext : IdentityDbContext<ApplicationUser, Appl
             NormalizedName = "Viewer".ToUpper()
             }
         };
+
+
+        var roleClaimAdmin = new List<ApplicationRoleClaim>
+        {
+            new ApplicationRoleClaim
+            {
+                Id = 1,
+                ClaimType = "role",
+                ClaimValue = "Create",
+                RoleId = adminId
+            },
+            new ApplicationRoleClaim
+            {
+                Id = 2,
+                ClaimType = "role",
+                ClaimValue = "Read",
+                RoleId = adminId
+            },
+            new ApplicationRoleClaim
+            {
+                Id = 3,
+                ClaimType = "role",
+                ClaimValue = "Edit",
+                RoleId = adminId
+            },
+            new ApplicationRoleClaim
+            {
+                Id = 4,
+                ClaimType = "role",
+                ClaimValue = "Delete",
+                RoleId = adminId
+            }
+        };
+
+        var roleClaimViewer = new List<ApplicationRoleClaim>
+        {
+           
+            new ApplicationRoleClaim
+            {
+                Id = 5,
+                ClaimType = "role",
+                ClaimValue = "Read",
+                RoleId = viewerId
+            }
+        };
+
+        var roleClaimEditor = new List<ApplicationRoleClaim>
+        {
+
+            new ApplicationRoleClaim
+            {
+                Id = 6,
+                ClaimType = "role",
+                ClaimValue = "Edit",
+                RoleId = editorId
+            }
+        };
+
+        //var roleClaimAdminExtra = new List<ApplicationRoleClaim>
+        //{
+        //    new ApplicationRoleClaim
+        //    {
+        //        Id = 7,
+        //        ClaimType = "role",
+        //        ClaimValue = "burnup"
+
+        //    }
+        //};
 
 
 
@@ -98,6 +166,9 @@ public partial class HrisDbAuthContext : IdentityDbContext<ApplicationUser, Appl
 
         //Data Insertion in time of migration
         builder.Entity<ApplicationRole>().HasData(roles);
+        builder.Entity<ApplicationRoleClaim>().HasData(roleClaimAdmin);
+        builder.Entity<ApplicationRoleClaim>().HasData(roleClaimViewer);
+        builder.Entity<ApplicationRoleClaim>().HasData(roleClaimEditor);
 
     }
 

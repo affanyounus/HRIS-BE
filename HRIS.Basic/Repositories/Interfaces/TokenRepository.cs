@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using HRIS.Basic.Models.Domain.Auth;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace HRIS.Basic.Repositories.Interfaces
@@ -16,15 +17,21 @@ namespace HRIS.Basic.Repositories.Interfaces
             this._configuration = configuration;
             
         }
-        public string CreateJWTToken(ApplicationUser user, List<string> roles)
+        public string CreateJWTToken(ApplicationUser user, List<string> roles, List<Claim> userClaims)
         {
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            //var claims = new List<Claim>();
+            //claims.Add(new Claim(ClaimTypes.Email, user.Email));
 
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            //foreach (var role in roles)
+            //{
+            //    claims.Add(new Claim(ClaimTypes.Role, role));
+            //}
+
+            //claims.AddRange(userClaims);
+
+            var claims = new List<Claim>();
+
+            claims.Add(new Claim(ClaimTypes.Email, user.Email));
 
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
